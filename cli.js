@@ -11,9 +11,9 @@ function parseArgs(argv) {
 }
 
 function generateSVG(initials, bgColor, circleColor, textColor, size = 200, inset = 0.1) {
-  const radius = (size / 2) * (1 - inset);
-  const textY = size / 2 + (size * 0.3 * 0.35);
-  const fontSize = size * 0.3;
+  const radius = (size / 2) * (1 - inset) * 0.9;
+  const fontSize = size * 0.33;
+  const textY = size / 2 + (fontSize * 0.35);
 
   return `<svg viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
   <rect width="${size}" height="${size}" fill="${bgColor}"/>
