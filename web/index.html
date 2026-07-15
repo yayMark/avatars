@@ -59,6 +59,18 @@
       border-color: #0066cc;
       box-shadow: 0 0 0 2px rgba(0,102,204,0.1);
     }
+    select {
+      padding: 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 1rem;
+      font-family: inherit;
+    }
+    select:focus {
+      outline: none;
+      border-color: #0066cc;
+      box-shadow: 0 0 0 2px rgba(0,102,204,0.1);
+    }
     .preview {
       display: flex;
       justify-content: center;
@@ -127,6 +139,21 @@
         <label for="inset">Inset %</label>
         <input type="number" id="inset" value="10" min="0" max="50" step="1">
       </div>
+      <div class="form-group">
+        <label for="fontSize">Font Size (×)</label>
+        <input type="number" id="fontSize" value="1" min="0.5" max="2" step="0.1">
+      </div>
+      <div class="form-group">
+        <label for="fontFamily">Font</label>
+        <select id="fontFamily">
+          <option value="Arial">Arial</option>
+          <option value="Helvetica">Helvetica</option>
+          <option value="Georgia">Georgia</option>
+          <option value="'Courier New'">Courier New</option>
+          <option value="Verdana">Verdana</option>
+          <option value="Trebuchet MS">Trebuchet MS</option>
+        </select>
+      </div>
     </div>
 
     <div class="preview">
@@ -140,14 +167,15 @@
   </div>
 
   <script>
-    function generateSVG(initials, bgColor, circleColor, textColor, size = 200, inset = 0.1) {
+    function generateSVG(initials, bgColor, circleColor, textColor, size = 200, inset = 0.1, fontFamily = 'Arial', fontSizeMultiplier = 1) {
       const radius = (size / 2) * (1 - inset);
-      const fontSize = size * 0.33;
+      const baseFontSize = size * 0.33;
+      const fontSize = baseFontSize * fontSizeMultiplier;
       const textY = size / 2 + (fontSize * 0.35);
 
       return `<rect width="${size}" height="${size}" fill="${bgColor}"/>
   <circle cx="${size / 2}" cy="${size / 2}" r="${radius}" fill="${circleColor}"/>
-  <text x="${size / 2}" y="${textY}" font-family="Arial" font-weight="bold" font-size="${fontSize}" fill="${textColor}" text-anchor="middle">${initials}</text>`;
+  <text x="${size / 2}" y="${textY}" font-family="${fontFamily}" font-weight="bold" font-size="${fontSize}" fill="${textColor}" text-anchor="middle">${initials}</text>`;
     }
 
     function updatePreview() {
@@ -157,18 +185,26 @@
       const textColor = document.getElementById('textColor').value;
       const size = parseInt(document.getElementById('size').value);
       const inset = parseInt(document.getElementById('inset').value) / 100;
+      const fontFamily = document.getElementById('fontFamily').value;
+      const fontSizeMultiplier = parseFloat(document.getElementById('fontSize').value);
 
       const svg = document.getElementById('preview');
       svg.setAttribute('viewBox', `0 0 ${size} ${size}`);
-      svg.innerHTML = generateSVG(initials, bgColor, circleColor, textColor, size, inset);
+      svg.innerHTML = generateSVG(initials, bgColor, circleColor, textColor, size, inset, fontFamily, fontSizeMultiplier);
     }
 
     function downloadSVG() {
       const initials = document.getElementById('initials').value || 'AB';
       const size = parseInt(document.getElementById('size').value);
-      const svg = document.getElementById('preview');
+      const bgColor = document.getElementById('bgColor').value;
+      const circleColor = document.getElementById('circleColor').value;
+      const textColor = document.getElementById('textColor').value;
+      const inset = parseInt(document.getElementById('inset').value) / 100;
+      const fontFamily = document.getElementById('fontFamily').value;
+      const fontSizeMultiplier = parseFloat(document.getElementById('fontSize').value);
 
-      const svgString = `<svg viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">\n  ${svg.innerHTML}\n</svg>`;
+      const svgContent = generateSVG(initials, bgColor, circleColor, textColor, size, inset, fontFamily, fontSizeMultiplier);
+      const svgString = `<svg viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">\n  ${svgContent}\n</svg>`;
       const blob = new Blob([svgString], { type: 'image/svg+xml' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -181,9 +217,15 @@
     function downloadPNG() {
       const initials = document.getElementById('initials').value || 'AB';
       const size = parseInt(document.getElementById('size').value);
-      const svg = document.getElementById('preview');
+      const bgColor = document.getElementById('bgColor').value;
+      const circleColor = document.getElementById('circleColor').value;
+      const textColor = document.getElementById('textColor').value;
+      const inset = parseInt(document.getElementById('inset').value) / 100;
+      const fontFamily = document.getElementById('fontFamily').value;
+      const fontSizeMultiplier = parseFloat(document.getElementById('fontSize').value);
 
-      const svgString = `<svg viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">\n  ${svg.innerHTML}\n</svg>`;
+      const svgContent = generateSVG(initials, bgColor, circleColor, textColor, size, inset, fontFamily, fontSizeMultiplier);
+      const svgString = `<svg viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">\n  ${svgContent}\n</svg>`;
       const img = new Image();
       img.onload = () => {
         const canvas = document.createElement('canvas');
@@ -204,7 +246,7 @@
     }
 
     // Attach listeners
-    ['initials', 'bgColor', 'circleColor', 'textColor', 'size', 'inset'].forEach(id => {
+    ['initials', 'bgColor', 'circleColor', 'textColor', 'size', 'inset', 'fontSize', 'fontFamily'].forEach(id => {
       document.getElementById(id).addEventListener('change', updatePreview);
       document.getElementById(id).addEventListener('input', updatePreview);
     });
