@@ -108,6 +108,75 @@
     button.secondary:hover {
       background: #555;
     }
+    .preset-section {
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid #ddd;
+    }
+    .preset-controls {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .preset-controls input {
+      flex: 1;
+    }
+    .preset-controls button {
+      flex: 0 0 auto;
+      padding: 0.5rem 1rem;
+    }
+    .presets-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+      gap: 1rem;
+    }
+    .preset-item {
+      position: relative;
+      cursor: pointer;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #f9f9f9;
+      border: 2px solid transparent;
+      transition: border-color 0.2s;
+    }
+    .preset-item:hover {
+      border-color: #0066cc;
+    }
+    .preset-item svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .preset-delete {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      background: rgba(255,0,0,0.8);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      padding: 0;
+      font-size: 12px;
+      cursor: pointer;
+      display: none;
+    }
+    .preset-item:hover .preset-delete {
+      display: block;
+    }
+    .preset-delete:hover {
+      background: rgba(255,0,0,1);
+    }
+    .preset-label {
+      font-size: 0.75rem;
+      text-align: center;
+      padding: 0.25rem;
+      color: #666;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   </style>
 </head>
 <body>
@@ -164,9 +233,95 @@
       <button onclick="downloadSVG()">Download SVG</button>
       <button class="secondary" onclick="downloadPNG()">Download PNG</button>
     </div>
+
+    <div class="preset-section">
+      <h2 style="font-size: 1.125rem; margin-bottom: 1rem; color: #333;">Presets</h2>
+      <div class="preset-controls">
+        <input type="text" id="presetName" placeholder="Name this preset..." maxlength="20">
+        <button onclick="savePreset()" style="flex: 0 0 auto;">Save Preset</button>
+      </div>
+      <div class="presets-grid" id="presetsGrid"></div>
+    </div>
   </div>
 
   <script>
+    const PRESETS_KEY = 'avatarPresets';
+
+    function getPresets() {
+      const stored = localStorage.getItem(PRESETS_KEY);
+      return stored ? JSON.parse(stored) : {};
+    }
+
+    function savePreset() {
+      const name = document.getElementById('presetName').value.trim();
+      if (!name) {
+        alert('Enter a preset name');
+        return;
+      }
+
+      const preset = {
+        initials: document.getElementById('initials').value,
+        bgColor: document.getElementById('bgColor').value,
+        circleColor: document.getElementById('circleColor').value,
+        textColor: document.getElementById('textColor').value,
+        size: document.getElementById('size').value,
+        inset: document.getElementById('inset').value,
+        fontSize: document.getElementById('fontSize').value,
+        fontFamily: document.getElementById('fontFamily').value
+      };
+
+      const presets = getPresets();
+      presets[name] = preset;
+      localStorage.setItem(PRESETS_KEY, JSON.stringify(presets));
+      document.getElementById('presetName').value = '';
+      renderPresets();
+    }
+
+    function loadPreset(name) {
+      const presets = getPresets();
+      const preset = presets[name];
+      if (!preset) return;
+
+      document.getElementById('initials').value = preset.initials;
+      document.getElementById('bgColor').value = preset.bgColor;
+      document.getElementById('circleColor').value = preset.circleColor;
+      document.getElementById('textColor').value = preset.textColor;
+      document.getElementById('size').value = preset.size;
+      document.getElementById('inset').value = preset.inset;
+      document.getElementById('fontSize').value = preset.fontSize;
+      document.getElementById('fontFamily').value = preset.fontFamily;
+      updatePreview();
+    }
+
+    function deletePreset(name, evt) {
+      evt.stopPropagation();
+      if (confirm(`Delete preset "${name}"?`)) {
+        const presets = getPresets();
+        delete presets[name];
+        localStorage.setItem(PRESETS_KEY, JSON.stringify(presets));
+        renderPresets();
+      }
+    }
+
+    function renderPresets() {
+      const presets = getPresets();
+      const grid = document.getElementById('presetsGrid');
+      grid.innerHTML = '';
+
+      Object.keys(presets).forEach(name => {
+        const preset = presets[name];
+        const item = document.createElement('div');
+        item.className = 'preset-item';
+        item.onclick = () => loadPreset(name);
+
+        const svgContent = generateSVG(preset.initials, preset.bgColor, preset.circleColor, preset.textColor, 60, preset.inset / 100, preset.fontFamily, preset.fontSize);
+        const svgHTML = `<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">${svgContent}</svg>`;
+
+        item.innerHTML = svgHTML + `<div class="preset-label">${name}</div><button class="preset-delete" onclick="deletePreset('${name}', event)">×</button>`;
+        grid.appendChild(item);
+      });
+    }
+
     function generateSVG(initials, bgColor, circleColor, textColor, size = 200, inset = 0.1, fontFamily = 'Arial', fontSizeMultiplier = 1) {
       const radius = (size / 2) * (1 - inset);
       const baseFontSize = size * 0.33;
@@ -253,6 +408,7 @@
 
     // Initial render
     updatePreview();
+    renderPresets();
   </script>
 </body>
 </html>
