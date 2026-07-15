@@ -1,0 +1,13 @@
+{
+  "name": "avatar-generator",
+  "version": "1.0.0",
+  "description": "SVG initials-based avatar generator with PNG export",
+  "main": "cli.js",
+  "type": "module",
+  "scripts": {
+    "generate": "node cli.js"
+  },
+  "dependencies": {
+    "sharp": "^0.33.0"
+  }
+}
