@@ -11,7 +11,7 @@ function parseArgs(argv) {
 }
 
 function generateSVG(initials, bgColor, circleColor, textColor, size = 200, inset = 0.1) {
-  const radius = (size / 2) * (1 - inset) * 0.9;
+  const radius = (size / 2) * (1 - inset);
   const fontSize = size * 0.33;
   const textY = size / 2 + (fontSize * 0.35);
 
