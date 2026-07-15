@@ -174,15 +174,6 @@
     .preset-delete:hover {
       background: rgba(255,0,0,1);
     }
-    .preset-label {
-      font-size: 0.75rem;
-      text-align: center;
-      padding: 0.25rem;
-      color: #666;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
   </style>
 </head>
 <body>
@@ -323,7 +314,7 @@
         const svgContent = generateSVG(preset.initials, preset.bgColor, preset.circleColor, preset.textColor, 60, preset.inset / 100, preset.fontFamily, preset.fontSize);
         const svgHTML = `<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">${svgContent}</svg>`;
 
-        item.innerHTML = svgHTML + `<div class="preset-label">${name}</div><button class="preset-delete" onclick="deletePreset('${name}', event)">×</button>`;
+        item.innerHTML = svgHTML + `<button class="preset-delete" onclick="deletePreset('${name}', event)" title="${name}">×</button>`;
         grid.appendChild(item);
       });
     }
