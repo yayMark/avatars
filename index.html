@@ -126,9 +126,6 @@
     .preset-controls {
       margin-bottom: 0.75rem;
     }
-    .preset-controls button {
-      width: 100%;
-    }
     .presets-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
@@ -242,13 +239,13 @@
     <div class="buttons">
       <button onclick="downloadSVG()">Download SVG</button>
       <button class="secondary" onclick="downloadPNG()">Download PNG</button>
+      <button onclick="savePreset()">Save Preset</button>
     </div>
 
     <div class="preset-section">
       <h2 style="font-size: 1rem; margin-bottom: 0.5rem; color: #333;">Presets</h2>
       <div class="preset-controls">
-        <button onclick="savePreset()">Save Preset</button>
-        <label for="showCircle" style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem;">
+        <label for="showCircle" style="display: flex; align-items: center; gap: 0.5rem;">
           <input type="checkbox" id="showCircle" checked>
           Show Circle
         </label>
