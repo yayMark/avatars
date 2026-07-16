@@ -178,6 +178,19 @@
     .preset-delete:hover {
       background: rgba(255,0,0,1);
     }
+    .build-badge {
+      position: fixed;
+      bottom: 0.5rem;
+      right: 0.5rem;
+      font-size: 0.7rem;
+      color: #999;
+      opacity: 0.5;
+      font-family: monospace;
+      padding: 0.25rem 0.5rem;
+      border-radius: 2px;
+      background: transparent;
+      border: 1px solid #ddd;
+    }
   </style>
 </head>
 <body>
@@ -242,6 +255,7 @@
       </div>
       <div class="presets-grid" id="presetsGrid"></div>
     </div>
+    <div class="build-badge" title="Build commit hash">9e29008</div>
   </div>
 
   <script>
