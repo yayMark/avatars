@@ -242,6 +242,7 @@
 
   <script>
     const PRESETS_KEY = 'avatarPresets';
+    let showCircleInPresets = true;
 
     function getPresets() {
       const stored = localStorage.getItem(PRESETS_KEY);
@@ -259,8 +260,7 @@
         textColor: document.getElementById('textColor').value,
         inset: document.getElementById('inset').value,
         fontSize: document.getElementById('fontSize').value,
-        fontFamily: document.getElementById('fontFamily').value,
-        showCircle: document.getElementById('showCircle').checked
+        fontFamily: document.getElementById('fontFamily').value
       };
 
       presets[name] = preset;
@@ -280,7 +280,6 @@
       document.getElementById('inset').value = preset.inset;
       document.getElementById('fontSize').value = preset.fontSize;
       document.getElementById('fontFamily').value = preset.fontFamily;
-      document.getElementById('showCircle').checked = preset.showCircle !== false;
       updatePreview();
     }
 
@@ -308,7 +307,7 @@
         item.className = 'preset-item';
         item.onclick = () => loadPreset(name);
 
-        const svgContent = generateSVG(preset.initials, preset.bgColor, preset.circleColor, preset.textColor, 60, preset.inset / 100, preset.fontFamily, preset.fontSize, preset.showCircle !== false);
+        const svgContent = generateSVG(preset.initials, preset.bgColor, preset.circleColor, preset.textColor, 60, preset.inset / 100, preset.fontFamily, preset.fontSize, showCircleInPresets);
         const svgHTML = `<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">${svgContent}</svg>`;
 
         item.innerHTML = svgHTML;
@@ -349,11 +348,10 @@ ${circle}  <text x="${size / 2}" y="${textY}" font-family="${fontFamily}" font-w
       const inset = parseInt(document.getElementById('inset').value) / 100;
       const fontFamily = document.getElementById('fontFamily').value;
       const fontSizeMultiplier = parseFloat(document.getElementById('fontSize').value);
-      const showCircle = document.getElementById('showCircle').checked;
 
       const svg = document.getElementById('preview');
       svg.setAttribute('viewBox', `0 0 ${previewSize} ${previewSize}`);
-      svg.innerHTML = generateSVG(initials, bgColor, circleColor, textColor, previewSize, inset, fontFamily, fontSizeMultiplier, showCircle);
+      svg.innerHTML = generateSVG(initials, bgColor, circleColor, textColor, previewSize, inset, fontFamily, fontSizeMultiplier, true);
     }
 
     function downloadSVG() {
@@ -365,9 +363,8 @@ ${circle}  <text x="${size / 2}" y="${textY}" font-family="${fontFamily}" font-w
       const inset = parseInt(document.getElementById('inset').value) / 100;
       const fontFamily = document.getElementById('fontFamily').value;
       const fontSizeMultiplier = parseFloat(document.getElementById('fontSize').value);
-      const showCircle = document.getElementById('showCircle').checked;
 
-      const svgContent = generateSVG(initials, bgColor, circleColor, textColor, exportSize, inset, fontFamily, fontSizeMultiplier, showCircle);
+      const svgContent = generateSVG(initials, bgColor, circleColor, textColor, exportSize, inset, fontFamily, fontSizeMultiplier, true);
       const svgString = `<svg viewBox="0 0 ${exportSize} ${exportSize}" xmlns="http://www.w3.org/2000/svg">\n  ${svgContent}\n</svg>`;
       const blob = new Blob([svgString], { type: 'image/svg+xml' });
       const url = URL.createObjectURL(blob);
@@ -387,9 +384,8 @@ ${circle}  <text x="${size / 2}" y="${textY}" font-family="${fontFamily}" font-w
       const inset = parseInt(document.getElementById('inset').value) / 100;
       const fontFamily = document.getElementById('fontFamily').value;
       const fontSizeMultiplier = parseFloat(document.getElementById('fontSize').value);
-      const showCircle = document.getElementById('showCircle').checked;
 
-      const svgContent = generateSVG(initials, bgColor, circleColor, textColor, exportSize, inset, fontFamily, fontSizeMultiplier, showCircle);
+      const svgContent = generateSVG(initials, bgColor, circleColor, textColor, exportSize, inset, fontFamily, fontSizeMultiplier, true);
       const svgString = `<svg viewBox="0 0 ${exportSize} ${exportSize}" xmlns="http://www.w3.org/2000/svg">\n  ${svgContent}\n</svg>`;
       const img = new Image();
       img.onload = () => {
@@ -411,9 +407,14 @@ ${circle}  <text x="${size / 2}" y="${textY}" font-family="${fontFamily}" font-w
     }
 
     // Attach listeners
-    ['initials', 'bgColor', 'circleColor', 'textColor', 'inset', 'fontSize', 'fontFamily', 'showCircle'].forEach(id => {
+    ['initials', 'bgColor', 'circleColor', 'textColor', 'inset', 'fontSize', 'fontFamily'].forEach(id => {
       document.getElementById(id).addEventListener('change', updatePreview);
       document.getElementById(id).addEventListener('input', updatePreview);
+    });
+
+    document.getElementById('showCircle').addEventListener('change', () => {
+      showCircleInPresets = document.getElementById('showCircle').checked;
+      renderPresets();
     });
 
     // Initial render
