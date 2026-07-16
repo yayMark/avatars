@@ -351,7 +351,7 @@
 
     function downloadSVG() {
       const initials = document.getElementById('initials').value || 'AB';
-      const size = parseInt(document.getElementById('size').value);
+      const exportSize = 400;
       const bgColor = document.getElementById('bgColor').value;
       const circleColor = document.getElementById('circleColor').value;
       const textColor = document.getElementById('textColor').value;
@@ -359,8 +359,8 @@
       const fontFamily = document.getElementById('fontFamily').value;
       const fontSizeMultiplier = parseFloat(document.getElementById('fontSize').value);
 
-      const svgContent = generateSVG(initials, bgColor, circleColor, textColor, size, inset, fontFamily, fontSizeMultiplier);
-      const svgString = `<svg viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">\n  ${svgContent}\n</svg>`;
+      const svgContent = generateSVG(initials, bgColor, circleColor, textColor, exportSize, inset, fontFamily, fontSizeMultiplier);
+      const svgString = `<svg viewBox="0 0 ${exportSize} ${exportSize}" xmlns="http://www.w3.org/2000/svg">\n  ${svgContent}\n</svg>`;
       const blob = new Blob([svgString], { type: 'image/svg+xml' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -372,7 +372,7 @@
 
     function downloadPNG() {
       const initials = document.getElementById('initials').value || 'AB';
-      const size = parseInt(document.getElementById('size').value);
+      const exportSize = 400;
       const bgColor = document.getElementById('bgColor').value;
       const circleColor = document.getElementById('circleColor').value;
       const textColor = document.getElementById('textColor').value;
@@ -380,13 +380,13 @@
       const fontFamily = document.getElementById('fontFamily').value;
       const fontSizeMultiplier = parseFloat(document.getElementById('fontSize').value);
 
-      const svgContent = generateSVG(initials, bgColor, circleColor, textColor, size, inset, fontFamily, fontSizeMultiplier);
-      const svgString = `<svg viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">\n  ${svgContent}\n</svg>`;
+      const svgContent = generateSVG(initials, bgColor, circleColor, textColor, exportSize, inset, fontFamily, fontSizeMultiplier);
+      const svgString = `<svg viewBox="0 0 ${exportSize} ${exportSize}" xmlns="http://www.w3.org/2000/svg">\n  ${svgContent}\n</svg>`;
       const img = new Image();
       img.onload = () => {
         const canvas = document.createElement('canvas');
-        canvas.width = size;
-        canvas.height = size;
+        canvas.width = exportSize;
+        canvas.height = exportSize;
         const ctx = canvas.getContext('2d');
         ctx.drawImage(img, 0, 0);
         canvas.toBlob(blob => {

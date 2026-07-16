@@ -28,7 +28,7 @@ async function main() {
   const bgColor = args.bg || '#C8102E';
   const circleColor = args.circle || 'white';
   const textColor = args.text || '#C8102E';
-  const size = parseInt(args.size) || 200;
+  const size = parseInt(args.size) || 400;
   const outputDir = args.output || '.';
   const fileName = args.name || `avatar-${initials}`;
 
