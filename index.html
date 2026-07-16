@@ -251,7 +251,7 @@
       </div>
       <div class="presets-grid" id="presetsGrid"></div>
     </div>
-    <div class="build-badge" title="Build number">Build 5</div>
+    <div class="build-badge" title="Build number">Build 6</div>
   </div>
 
   <script>
@@ -430,6 +430,7 @@ ${circle}  <text x="${size / 2}" y="${textY}" font-family="${fontFamily}" font-w
       const fontFamily = document.getElementById('fontFamily').value;
       const fontSizeMultiplier = parseFloat(document.getElementById('fontSize').value);
 
+      const fileName = generatePresetName(initials, bgColor, circleColor, textColor);
       const svgContent = generateSVG(initials, bgColor, circleColor, textColor, exportSize, inset, fontFamily, fontSizeMultiplier, true);
       const svgString = `<svg viewBox="0 0 ${exportSize} ${exportSize}" xmlns="http://www.w3.org/2000/svg">\n  ${svgContent}\n</svg>`;
       const img = new Image();
@@ -443,7 +444,7 @@ ${circle}  <text x="${size / 2}" y="${textY}" font-family="${fontFamily}" font-w
           const url = URL.createObjectURL(blob);
           const a = document.createElement('a');
           a.href = url;
-          a.download = `avatar-${initials}.png`;
+          a.download = `${fileName}.png`;
           a.click();
           URL.revokeObjectURL(url);
         });
