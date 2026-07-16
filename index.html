@@ -251,7 +251,7 @@
       </div>
       <div class="presets-grid" id="presetsGrid"></div>
     </div>
-    <div class="build-badge" title="Build number">Build 6</div>
+    <div class="build-badge" title="Build number">Build 7</div>
   </div>
 
   <script>
@@ -330,12 +330,10 @@
 
     function deletePreset(name, evt) {
       evt.stopPropagation();
-      if (confirm(`Delete preset "${name}"?`)) {
-        const presets = getPresets();
-        delete presets[name];
-        localStorage.setItem(PRESETS_KEY, JSON.stringify(presets));
-        renderPresets();
-      }
+      const presets = getPresets();
+      delete presets[name];
+      localStorage.setItem(PRESETS_KEY, JSON.stringify(presets));
+      renderPresets();
     }
 
     function renderPresets() {
