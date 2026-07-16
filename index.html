@@ -251,12 +251,38 @@
       </div>
       <div class="presets-grid" id="presetsGrid"></div>
     </div>
-    <div class="build-badge" title="Build number">Build 4</div>
+    <div class="build-badge" title="Build number">Build 5</div>
   </div>
 
   <script>
     const PRESETS_KEY = 'avatarPresets';
     let showCircleInPresets = true;
+
+    const colorNames = {
+      '#c8102e': 'crimson',
+      '#c60c30': 'scarlet',
+      '#ffd700': 'gold',
+      '#ffc400': 'amber',
+      '#008000': 'forest',
+      '#00008b': 'navy',
+      '#003da5': 'cobalt',
+      'white': 'white',
+      '#ffffff': 'white',
+      'black': 'black',
+      '#000000': 'black',
+    };
+
+    function getColorName(color) {
+      const normalized = color.toLowerCase().trim();
+      return colorNames[normalized] || normalized.replace('#', '');
+    }
+
+    function generatePresetName(initials, bgColor, circleColor, textColor) {
+      const bgName = getColorName(bgColor);
+      const circleName = getColorName(circleColor);
+      const textName = getColorName(textColor);
+      return `avatar-${initials}-${bgName}-${circleName}-${textName}`;
+    }
 
     function getPresets() {
       const stored = localStorage.getItem(PRESETS_KEY);
@@ -265,13 +291,18 @@
 
     function savePreset() {
       const presets = getPresets();
-      const name = Date.now().toString();
+      const initials = document.getElementById('initials').value;
+      const bgColor = document.getElementById('bgColor').value;
+      const circleColor = document.getElementById('circleColor').value;
+      const textColor = document.getElementById('textColor').value;
+
+      const name = generatePresetName(initials, bgColor, circleColor, textColor);
 
       const preset = {
-        initials: document.getElementById('initials').value,
-        bgColor: document.getElementById('bgColor').value,
-        circleColor: document.getElementById('circleColor').value,
-        textColor: document.getElementById('textColor').value,
+        initials: initials,
+        bgColor: bgColor,
+        circleColor: circleColor,
+        textColor: textColor,
         inset: document.getElementById('inset').value,
         fontSize: document.getElementById('fontSize').value,
         fontFamily: document.getElementById('fontFamily').value
