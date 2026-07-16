@@ -251,18 +251,54 @@
       </div>
       <div class="presets-grid" id="presetsGrid"></div>
     </div>
-    <div class="build-badge" title="Build number">Build 9</div>
+    <div class="build-badge" title="Build number">Build 10</div>
   </div>
 
-  <script src="https://chir.mnichols.com/ntc/ntc.js"></script>
   <script>
     const PRESETS_KEY = 'avatarPresets';
     let showCircleInPresets = true;
+    let xkcdColors = {};
+
+    fetch('https://xkcd.com/color/rgb.txt')
+      .then(r => r.text())
+      .then(text => {
+        text.split('\n').forEach(line => {
+          const [name, r, g, b] = line.trim().split(/\s+/);
+          if (name && r && g && b) {
+            const hex = '#' + [parseInt(r), parseInt(g), parseInt(b)].map(x => x.toString(16).padStart(2, '0')).join('');
+            xkcdColors[hex.toLowerCase()] = name;
+          }
+        });
+      });
+
+    function hexToRgb(hex) {
+      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      return result ? [parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16)] : null;
+    }
+
+    function colorDistance(rgb1, rgb2) {
+      return Math.sqrt((rgb1[0]-rgb2[0])**2 + (rgb1[1]-rgb2[1])**2 + (rgb1[2]-rgb2[2])**2);
+    }
 
     function getColorName(color) {
       try {
-        const n = ntc.name(color);
-        return n.name().toLowerCase().replace(/\s+/g, '-').slice(0, 20);
+        const hex = color.startsWith('#') ? color.toLowerCase() : '#' + color.toLowerCase();
+        if (xkcdColors[hex]) return xkcdColors[hex];
+
+        const rgb = hexToRgb(hex);
+        if (!rgb) return hex.replace('#', '').slice(0, 6);
+
+        let closest = null;
+        let minDist = Infinity;
+        Object.entries(xkcdColors).forEach(([h, name]) => {
+          const dist = colorDistance(rgb, hexToRgb(h));
+          if (dist < minDist) {
+            minDist = dist;
+            closest = name;
+          }
+        });
+
+        return closest || hex.replace('#', '').slice(0, 6);
       } catch (e) {
         return color.toLowerCase().replace('#', '').slice(0, 6);
       }
