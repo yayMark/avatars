@@ -206,6 +206,12 @@
         <input type="number" id="inset" value="10" min="0" max="50" step="1">
       </div>
       <div class="form-group">
+        <label for="showCircle" style="display: flex; align-items: center; gap: 0.5rem;">
+          <input type="checkbox" id="showCircle" checked>
+          Show Circle
+        </label>
+      </div>
+      <div class="form-group">
         <label for="fontSize">Font Size (×)</label>
         <input type="number" id="fontSize" value="1" min="0.5" max="2" step="0.1">
       </div>
@@ -235,10 +241,6 @@
       <h2 style="font-size: 1rem; margin-bottom: 0.5rem; color: #333;">Presets</h2>
       <div class="preset-controls">
         <button onclick="savePreset()">Save Preset</button>
-        <label for="showCircle" style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem;">
-          <input type="checkbox" id="showCircle" checked>
-          Show Circle
-        </label>
       </div>
       <div class="presets-grid" id="presetsGrid"></div>
     </div>
@@ -352,10 +354,11 @@ ${circle}  <text x="${size / 2}" y="${textY}" font-family="${fontFamily}" font-w
       const inset = parseInt(document.getElementById('inset').value) / 100;
       const fontFamily = document.getElementById('fontFamily').value;
       const fontSizeMultiplier = parseFloat(document.getElementById('fontSize').value);
+      const showCircle = document.getElementById('showCircle').checked;
 
       const svg = document.getElementById('preview');
       svg.setAttribute('viewBox', `0 0 ${previewSize} ${previewSize}`);
-      svg.innerHTML = generateSVG(initials, bgColor, circleColor, textColor, previewSize, inset, fontFamily, fontSizeMultiplier, true);
+      svg.innerHTML = generateSVG(initials, bgColor, circleColor, textColor, previewSize, inset, fontFamily, fontSizeMultiplier, showCircle);
     }
 
     function downloadSVG() {
@@ -367,8 +370,9 @@ ${circle}  <text x="${size / 2}" y="${textY}" font-family="${fontFamily}" font-w
       const inset = parseInt(document.getElementById('inset').value) / 100;
       const fontFamily = document.getElementById('fontFamily').value;
       const fontSizeMultiplier = parseFloat(document.getElementById('fontSize').value);
+      const showCircle = document.getElementById('showCircle').checked;
 
-      const svgContent = generateSVG(initials, bgColor, circleColor, textColor, exportSize, inset, fontFamily, fontSizeMultiplier, true);
+      const svgContent = generateSVG(initials, bgColor, circleColor, textColor, exportSize, inset, fontFamily, fontSizeMultiplier, showCircle);
       const svgString = `<svg viewBox="0 0 ${exportSize} ${exportSize}" xmlns="http://www.w3.org/2000/svg">\n  ${svgContent}\n</svg>`;
       const blob = new Blob([svgString], { type: 'image/svg+xml' });
       const url = URL.createObjectURL(blob);
@@ -388,8 +392,9 @@ ${circle}  <text x="${size / 2}" y="${textY}" font-family="${fontFamily}" font-w
       const inset = parseInt(document.getElementById('inset').value) / 100;
       const fontFamily = document.getElementById('fontFamily').value;
       const fontSizeMultiplier = parseFloat(document.getElementById('fontSize').value);
+      const showCircle = document.getElementById('showCircle').checked;
 
-      const svgContent = generateSVG(initials, bgColor, circleColor, textColor, exportSize, inset, fontFamily, fontSizeMultiplier, true);
+      const svgContent = generateSVG(initials, bgColor, circleColor, textColor, exportSize, inset, fontFamily, fontSizeMultiplier, showCircle);
       const svgString = `<svg viewBox="0 0 ${exportSize} ${exportSize}" xmlns="http://www.w3.org/2000/svg">\n  ${svgContent}\n</svg>`;
       const img = new Image();
       img.onload = () => {
@@ -418,6 +423,7 @@ ${circle}  <text x="${size / 2}" y="${textY}" font-family="${fontFamily}" font-w
 
     document.getElementById('showCircle').addEventListener('change', () => {
       showCircleInPresets = document.getElementById('showCircle').checked;
+      updatePreview();
       renderPresets();
     });
 
