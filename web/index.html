@@ -149,8 +149,8 @@
     }
     .preset-delete {
       position: absolute;
-      top: -8px;
-      right: -8px;
+      top: 2px;
+      right: 2px;
       background: rgba(255,0,0,0.8);
       color: white;
       border: none;
@@ -161,8 +161,12 @@
       font-size: 12px;
       cursor: pointer;
       display: none;
+      z-index: 10;
     }
-    .preset-item:hover .preset-delete {
+    .preset-wrapper {
+      position: relative;
+    }
+    .preset-wrapper:hover .preset-delete {
       display: block;
     }
     .preset-delete:hover {
@@ -295,6 +299,9 @@
 
       Object.keys(presets).forEach(name => {
         const preset = presets[name];
+        const wrapper = document.createElement('div');
+        wrapper.className = 'preset-wrapper';
+
         const item = document.createElement('div');
         item.className = 'preset-item';
         item.onclick = () => loadPreset(name);
@@ -302,8 +309,17 @@
         const svgContent = generateSVG(preset.initials, preset.bgColor, preset.circleColor, preset.textColor, 60, preset.inset / 100, preset.fontFamily, preset.fontSize);
         const svgHTML = `<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">${svgContent}</svg>`;
 
-        item.innerHTML = svgHTML + `<button class="preset-delete" onclick="deletePreset('${name}', event)" title="${name}">×</button>`;
-        grid.appendChild(item);
+        item.innerHTML = svgHTML;
+        wrapper.appendChild(item);
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'preset-delete';
+        deleteBtn.textContent = '×';
+        deleteBtn.title = name;
+        deleteBtn.onclick = (e) => deletePreset(name, e);
+        wrapper.appendChild(deleteBtn);
+
+        grid.appendChild(wrapper);
       });
     }
 
