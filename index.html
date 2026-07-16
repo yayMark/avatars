@@ -144,6 +144,10 @@
       transition: border-color 0.2s;
       aspect-ratio: 1;
     }
+    .preset-item.square {
+      border-radius: 0;
+      overflow: visible;
+    }
     .preset-item svg {
       width: 100%;
       height: auto;
@@ -304,7 +308,7 @@
         wrapper.className = 'preset-wrapper';
 
         const item = document.createElement('div');
-        item.className = 'preset-item';
+        item.className = 'preset-item' + (showCircleInPresets ? '' : ' square');
         item.onclick = () => loadPreset(name);
 
         const svgContent = generateSVG(preset.initials, preset.bgColor, preset.circleColor, preset.textColor, 60, preset.inset / 100, preset.fontFamily, preset.fontSize, showCircleInPresets);
