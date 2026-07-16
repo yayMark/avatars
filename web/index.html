@@ -119,16 +119,10 @@
       margin-bottom: 0.5rem !important;
     }
     .preset-controls {
-      display: flex;
-      gap: 0.5rem;
       margin-bottom: 0.75rem;
     }
-    .preset-controls input {
-      flex: 1;
-    }
     .preset-controls button {
-      flex: 0 0 auto;
-      padding: 0.5rem 1rem;
+      width: 100%;
     }
     .presets-grid {
       display: grid;
@@ -232,10 +226,9 @@
     </div>
 
     <div class="preset-section">
-      <h2 style="font-size: 1.125rem; margin-bottom: 1rem; color: #333;">Presets</h2>
+      <h2 style="font-size: 1rem; margin-bottom: 0.5rem; color: #333;">Presets</h2>
       <div class="preset-controls">
-        <input type="text" id="presetName" placeholder="Name this preset..." maxlength="20">
-        <button onclick="savePreset()" style="flex: 0 0 auto;">Save Preset</button>
+        <button onclick="savePreset()">Save Preset</button>
       </div>
       <div class="presets-grid" id="presetsGrid"></div>
     </div>
@@ -250,11 +243,8 @@
     }
 
     function savePreset() {
-      const name = document.getElementById('presetName').value.trim();
-      if (!name) {
-        alert('Enter a preset name');
-        return;
-      }
+      const presets = getPresets();
+      const name = Date.now().toString();
 
       const preset = {
         initials: document.getElementById('initials').value,
@@ -267,10 +257,8 @@
         fontFamily: document.getElementById('fontFamily').value
       };
 
-      const presets = getPresets();
       presets[name] = preset;
       localStorage.setItem(PRESETS_KEY, JSON.stringify(presets));
-      document.getElementById('presetName').value = '';
       renderPresets();
     }
 
