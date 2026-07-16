@@ -251,7 +251,7 @@
       </div>
       <div class="presets-grid" id="presetsGrid"></div>
     </div>
-    <div class="build-badge" title="Build number">Build 8</div>
+    <div class="build-badge" title="Build number">Build 9</div>
   </div>
 
   <script src="https://chir.mnichols.com/ntc/ntc.js"></script>
@@ -261,8 +261,7 @@
 
     function getColorName(color) {
       try {
-        const n_match = chroma.valid(color) ? chroma(color).hex() : color;
-        const n = ntc.name(n_match);
+        const n = ntc.name(color);
         return n.name().toLowerCase().replace(/\s+/g, '-').slice(0, 20);
       } catch (e) {
         return color.toLowerCase().replace('#', '').slice(0, 6);
