@@ -108,12 +108,6 @@
     button:hover {
       background: #0052a3;
     }
-    button.secondary {
-      background: #666;
-    }
-    button.secondary:hover {
-      background: #555;
-    }
     .preset-section {
       margin-top: 1rem;
       padding-top: 0.75rem;
@@ -131,49 +125,10 @@
       grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
       gap: 1rem;
     }
-    .preset-item {
-      position: relative;
-      cursor: pointer;
-      border-radius: 50%;
-      overflow: hidden;
-      background: #f9f9f9;
-      border: 2px solid transparent;
-      transition: border-color 0.2s;
-      aspect-ratio: 1;
-    }
-    .preset-item.square {
-      border-radius: 0;
-      overflow: visible;
-    }
     .preset-item svg {
       width: 100%;
       height: auto;
       display: block;
-    }
-    .preset-delete {
-      position: absolute;
-      top: 2px;
-      right: 2px;
-      background: rgba(255,0,0,0.8);
-      color: white;
-      border: none;
-      border-radius: 50%;
-      width: 20px;
-      height: 20px;
-      padding: 0;
-      font-size: 12px;
-      cursor: pointer;
-      display: none;
-      z-index: 10;
-    }
-    .preset-wrapper {
-      position: relative;
-    }
-    .preset-wrapper:hover .preset-delete {
-      display: block;
-    }
-    .preset-delete:hover {
-      background: rgba(255,0,0,1);
     }
     .build-badge {
       position: fixed;
@@ -251,14 +206,15 @@
       </div>
       <div class="presets-grid" id="presetsGrid"></div>
     </div>
-    <div class="build-badge" title="Build number">Build 12</div>
+    <div class="build-badge" title="Build number">Build 13</div>
   </div>
 
-  <script>
+  <script type="module">
+    import { colours } from './colours.js';
+
     const PRESETS_KEY = 'avatarPresets';
     let showCircleInPresets = true;
-
-    const xkcdColorData = {"cloudy blue":"#acc2d9","dark pastel green":"#56ae57","dust":"#b2996e","electric lime":"#a8ff04","fresh green":"#69d84f","light eggplant":"#894585","nasty green":"#70b23f","really light blue":"#d4ffff","tea":"#65ab7c","warm purple":"#952e8f","yellowish tan":"#fcfc81","cement":"#a5a391","dark grass green":"#388004","dusty teal":"#4c9085","grey teal":"#5e9b8a","macaroni and cheese":"#efb435","pinkish tan":"#d99b82","spruce":"#0a5f38","strong blue":"#0c06f7","tiffany blue":"#0aff78","french violet":"#8806ce","ugly brown":"#622e04","avocado":"#86a395","pale violet red":"#d7748c","pea green":"#a4bf20","dusty purple":"#825f87","celadon":"#ace5ee","dark brown":"#101011","weirdly brown":"#3e2725","pale chestnut":"#daa520","drunk":"#ffd700","puce":"#a57e52","muddy purple":"#5d1451","bruise":"#7e4071","cerulean blue":"#0485d1","seafoam green":"#80f9ad","ugly green":"#7a9428","cream":"#fffdd0","dirt":"#8f7f28","dark cyan":"#0a888a","pea":"#a4bf20","kelly green":"#02ab2e","olive green":"#6b8e23","burnt orange":"#c04e01","dark gray":"#1e1e1e","light gray":"#d3d3d3","navy":"#001f3f","silver":"#c0c0c0","maroon":"#800000","teal":"#008080","olive":"#808000","coral":"#ff7f50","salmon":"#fa8072","gold":"#ffd700","tan":"#d2b48c","khaki":"#f0e68c","light pink":"#ffb6c1","light cyan":"#e0ffff","light yellow":"#ffffe0","light green":"#90ee90","light gray":"#d3d3d3","light blue":"#add8e6","light red":"#ff6347","light purple":"#da70d6","light brown":"#8b7355","light orange":"#ffa500","light teal":"#afeeee","light navy":"#000080","light maroon":"#800000","light olive":"#808000","light coral":"#f08080","light salmon":"#ffa07a","light gold":"#daa520","light tan":"#f4a460","light khaki":"#f0e68c","light pink":"#ffb6c1","light cyan":"#e0ffff","light yellow":"#ffffe0","light green":"#90ee90","light gray":"#d3d3d3","light blue":"#add8e6","light red":"#ff6347","light purple":"#da70d6","light brown":"#8b7355","light orange":"#ffa500","light teal":"#afeeee","light navy":"#000080","light maroon":"#800000","light olive":"#808000","light coral":"#f08080","light salmon":"#ffa07a","light gold":"#daa520","light tan":"#f4a460","light khaki":"#f0e68c","dark red":"#8b0000","dark green":"#006400","dark blue":"#00008b","dark cyan":"#008b8b","dark magenta":"#8b008b","dark orange":"#ff8c00","dark purple":"#301934","dark salmon":"#e9967a","dark turquoise":"#00ced1","dark violet":"#9400d3","deep pink":"#ff1493","deep sky blue":"#00bfff","dim gray":"#696969","fire brick":"#b22222","floral white":"#fffaf0","forest green":"#228b22","fuchsia":"#ff00ff","gainsboro":"#dcdcdc","ghost white":"#f8f8ff","gold":"#ffd700","goldenrod":"#daa520","gray":"#808080","green":"#008000","green yellow":"#adff2f","grey":"#808080","honeydew":"#f0fff0","hot pink":"#ff69b4","indian red":"#cd5c5c","indigo":"#4b0082","ivory":"#fffff0","khaki":"#f0e68c","lavender":"#e6e6fa","lavender blush":"#fff0f5","lawn green":"#7cfc00","lemon chiffon":"#fffacd","light blue":"#add8e6","light coral":"#f08080","light cyan":"#e0ffff","light goldenrod yellow":"#fafad2","light gray":"#d3d3d3","light green":"#90ee90","light grey":"#d3d3d3","light pink":"#ffb6c1","light salmon":"#ffa07a","light sea green":"#20b2aa","light sky blue":"#87cefa","light slate gray":"#778899","light slate grey":"#778899","light steel blue":"#b0c4de","light yellow":"#ffffe0","lime":"#00ff00","lime green":"#32cd32","linen":"#faf0e6","magenta":"#ff00ff","maroon":"#800000","medium aquamarine":"#66cdaa","medium blue":"#0000cd","medium orchid":"#ba55d3","medium purple":"#9370db","medium sea green":"#3cb371","medium slate blue":"#7b68ee","medium spring green":"#00fa9a","medium turquoise":"#48d1cc","medium violet red":"#c71585","midnight blue":"#191970","mint cream":"#f5fffa","misty rose":"#ffe4e1","moccasin":"#ffe4b5","navajo white":"#ffdead","navy":"#000080","old lace":"#fdf5e6","olive":"#808000","olive drab":"#6b8e23","orange":"#ffa500","orange red":"#ff4500","orchid":"#da70d6","pale goldenrod":"#eee8aa","pale green":"#98fb98","pale turquoise":"#afeeee","pale violet red":"#db7093","papaya whip":"#ffefd5","peach puff":"#ffdab9","peru":"#cd853f","pink":"#ffc0cb","plum":"#dda0dd","powder blue":"#b0e0e6","purple":"#800080","red":"#ff0000","rosy brown":"#bc8f8f","royal blue":"#4169e1","saddle brown":"#8b4513","salmon":"#fa8072","sandy brown":"#f4a460","sea green":"#2e8b57","sea shell":"#fff5ee","sienna":"#a0522d","silver":"#c0c0c0","sky blue":"#87ceeb","slate blue":"#6a5acd","slate gray":"#708090","slate grey":"#708090","snow":"#fffafa","spring green":"#00ff7f","steel blue":"#4682b4","tan":"#d2b48c","teal":"#008080","thistle":"#d8bfd8","tomato":"#ff6347","turquoise":"#40e0d0","violet":"#ee82ee","wheat":"#f5deb3","white":"#ffffff","white smoke":"#f5f5f5","yellow":"#ffff00","yellow green":"#9acd32"};
+    const xkcdColorData = colours;
 
     function hexToRgb(hex) {
       const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -414,27 +370,6 @@ ${circle}  <text x="${size / 2}" y="${textY}" font-family="${fontFamily}" font-w
       const svg = document.getElementById('preview');
       svg.setAttribute('viewBox', `0 0 ${previewSize} ${previewSize}`);
       svg.innerHTML = generateSVG(initials, bgColor, circleColor, textColor, previewSize, inset, fontFamily, fontSizeMultiplier, true);
-    }
-
-    function downloadSVG() {
-      const initials = document.getElementById('initials').value || 'AB';
-      const exportSize = 400;
-      const bgColor = document.getElementById('bgColor').value;
-      const circleColor = document.getElementById('circleColor').value;
-      const textColor = document.getElementById('textColor').value;
-      const inset = parseInt(document.getElementById('inset').value) / 100;
-      const fontFamily = document.getElementById('fontFamily').value;
-      const fontSizeMultiplier = parseFloat(document.getElementById('fontSize').value);
-
-      const svgContent = generateSVG(initials, bgColor, circleColor, textColor, exportSize, inset, fontFamily, fontSizeMultiplier, true);
-      const svgString = `<svg viewBox="0 0 ${exportSize} ${exportSize}" xmlns="http://www.w3.org/2000/svg">\n  ${svgContent}\n</svg>`;
-      const blob = new Blob([svgString], { type: 'image/svg+xml' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `avatar-${initials}.svg`;
-      a.click();
-      URL.revokeObjectURL(url);
     }
 
     function downloadPNG() {
