@@ -108,6 +108,12 @@
     button:hover {
       background: #0052a3;
     }
+    button.secondary {
+      background: #666;
+    }
+    button.secondary:hover {
+      background: #555;
+    }
     .preset-section {
       margin-top: 1rem;
       padding-top: 0.75rem;
@@ -125,10 +131,49 @@
       grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
       gap: 1rem;
     }
+    .preset-item {
+      position: relative;
+      cursor: pointer;
+      border-radius: 50%;
+      overflow: hidden;
+      background: #f9f9f9;
+      border: 2px solid transparent;
+      transition: border-color 0.2s;
+      aspect-ratio: 1;
+    }
+    .preset-item.square {
+      border-radius: 0;
+      overflow: visible;
+    }
     .preset-item svg {
       width: 100%;
       height: auto;
       display: block;
+    }
+    .preset-delete {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      background: rgba(255,0,0,0.8);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      padding: 0;
+      font-size: 12px;
+      cursor: pointer;
+      display: none;
+      z-index: 10;
+    }
+    .preset-wrapper {
+      position: relative;
+    }
+    .preset-wrapper:hover .preset-delete {
+      display: block;
+    }
+    .preset-delete:hover {
+      background: rgba(255,0,0,1);
     }
     .build-badge {
       position: fixed;
@@ -206,7 +251,7 @@
       </div>
       <div class="presets-grid" id="presetsGrid"></div>
     </div>
-    <div class="build-badge" title="Build number">Build 14</div>
+    <div class="build-badge" title="Build number">Build 15</div>
   </div>
 
   <script type="module">
