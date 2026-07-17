@@ -1,4 +1,4 @@
-export const colours = {
+const colours = {
     "deep rosella": "#4b0101",
     "dusky bottlebrush": "#840000",
     "hot cayenne": "#e50000",
